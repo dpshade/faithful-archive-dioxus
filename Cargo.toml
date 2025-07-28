@@ -59,3 +59,18 @@ inherits = "dev"
 
 [profile.android-dev]
 inherits = "dev"
+
+[profile.release]
+opt-level = "s"          # Optimize for size
+lto = true               # Enable Link Time Optimization
+codegen-units = 1        # Better optimization at cost of compile time
+panic = "abort"          # Reduce binary size
+strip = "debuginfo"      # Remove debug symbols
+
+[profile.wasm-release]
+inherits = "release"
+opt-level = "z"          # Optimize aggressively for size (WASM)
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = "symbols"        # Remove all symbols for minimal WASM size
