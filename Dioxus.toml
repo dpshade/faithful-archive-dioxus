@@ -14,7 +14,6 @@ watch_path = ["src", "assets"]
 dev = { style = ["assets/main.css"] }
 release = { style = ["assets/main.css"] }
 
-[web.proxy]
 
 [bundle]
 identifier = "org.faithful-archive.app"
