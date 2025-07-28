@@ -1,27 +1,28 @@
 ---
 allowed-tools: [Bash]
-description: "Autonomously orchestrate claude/ branches - merge ready PRs, resolve GitHub issues, consolidate overlapping work, and align repository with Sanctily vision"
+description: "Autonomously orchestrate claude/ branches - merge ready PRs, resolve GitHub issues, consolidate overlapping work, and align repository with Faithful Archive vision"
 argument-hint: "[--dry-run] [--aggressive] [--target-branch=main]"
 ---
 
 # Claude Branch Orchestrator
 
-You are an expert DevOps Product Manager with autonomous decision-making authority for the **Sanctily Bible Reading Social App**. Your mission is to evolve the repository toward the documented vision while maintaining code quality and safety.
+You are an expert DevOps Product Manager with autonomous decision-making authority for the **Faithful Archive Dioxus App**. Your mission is to evolve the repository toward the documented vision while maintaining code quality and safety.
 
 ## Project Vision Context
 
-**Sanctily Vision**: A Christian Strava-like experience for Bible reading built on Arweave's decentralized storage. Core priorities:
-1. **Flutter Framework** with cross-platform support (iOS, Android, Web, Desktop)
-2. **Arweave Integration** - ANS-compliant Bible reading storage  
-3. **Two-tab Navigation** - Timeline and Profile views
-4. **Secure Wallet Management** - Flutter SecureStorage integration
-5. **Material Theme** - Modern theming with dark/light mode support
+**Faithful Archive Vision**: A Dioxus-based web application for uploading and sharing Christ-honoring spiritual content on Arweave's permanent storage. Core priorities:
+1. **Dioxus Framework** with WebAssembly for high-performance web delivery
+2. **Arweave Integration** - Permanent storage for spiritual content
+3. **Content Moderation System** - Ensuring only Christ-honoring content is indexed
+4. **Decentralized Archive** - Censorship-resistant spiritual content access
+5. **Progressive Web App** - Offline functionality and mobile support
 
 **Technical Standards**:
-- Dart with null safety and strong typing
-- StatefulWidget and StatelessWidget architecture  
-- Service layer pattern (ArweaveService, AuthService)
-- ANS data compliance for blockchain storage
+- Rust with Dioxus 0.6 framework
+- WebAssembly (WASM) compilation target
+- Service layer pattern (ArweaveService, WalletService, UploadService, StorageService)
+- IndexedDB for local caching via rexie
+- RSX syntax for component templates
 
 ## Enhanced Claude Branch Readiness Checks (Phase 3)
 
@@ -219,12 +220,12 @@ for branch in "${claude_branches[@]}"; do
         git merge --abort 2>/dev/null
     fi
     
-    # Check 2: Code quality validation (Flutter specific)
+    # Check 2: Code quality validation (Rust/Dioxus specific)
     echo "  🔍 Checking code quality..."
     
-    # Check for common Flutter issues in changed files
-    flutter_issues=0
-    if echo "$changed_files" | grep -q "\.dart$"; then
+    # Check for common Rust/Dioxus issues in changed files
+    rust_issues=0
+    if echo "$changed_files" | grep -q "\.rs$"; then
         # Check for TODO comments in new code
         new_todos=$(git diff origin/$TARGET_BRANCH...origin/$branch | grep "^+" | grep -c "TODO\|FIXME\|XXX" || echo "0")
         if [ $new_todos -gt 0 ]; then
@@ -232,27 +233,34 @@ for branch in "${claude_branches[@]}"; do
             readiness_issues+=("$new_todos unresolved TODOs")
         fi
         
-        # Check for print statements (should use debugPrint in Flutter)
-        new_prints=$(git diff origin/$TARGET_BRANCH...origin/$branch | grep "^+" | grep -c "print(" || echo "0")
+        # Check for println! statements (should use log::info! or similar)
+        new_prints=$(git diff origin/$TARGET_BRANCH...origin/$branch | grep "^+" | grep -c "println!(" || echo "0")
         if [ $new_prints -gt 0 ]; then
-            echo "     ⚠️  Found $new_prints print() statements (use debugPrint instead)"
-            flutter_issues=$((flutter_issues + new_prints))
+            echo "     ⚠️  Found $new_prints println!() statements (use log macros instead)"
+            rust_issues=$((rust_issues + new_prints))
+        fi
+        
+        # Check for unwrap() calls (should use proper error handling)
+        new_unwraps=$(git diff origin/$TARGET_BRANCH...origin/$branch | grep "^+" | grep -c "\.unwrap()" || echo "0")
+        if [ $new_unwraps -gt 5 ]; then
+            echo "     ⚠️  Found $new_unwraps .unwrap() calls (consider proper error handling)"
+            rust_issues=$((rust_issues + 1))
         fi
     fi
     
-    if [ $flutter_issues -eq 0 ]; then
+    if [ $rust_issues -eq 0 ]; then
         echo "     ✅ Code quality checks passed"
         readiness_score=$((readiness_score + 2))
     else
-        readiness_issues+=("$flutter_issues code quality issues")
+        readiness_issues+=("$rust_issues code quality issues")
     fi
     
     # Check 3: Test file coverage
     echo "  📋 Checking test coverage..."
-    test_files_added=$(echo "$changed_files" | grep -c "_test\.dart$" || echo "0")
-    implementation_files_added=$(echo "$changed_files" | grep -c "lib/.*\.dart$" || echo "0")
+    test_files_added=$(echo "$changed_files" | grep -c "test.*\.rs$\|tests/.*\.rs$" || echo "0")
+    implementation_files_added=$(echo "$changed_files" | grep -c "src/.*\.rs$" || echo "0")
     
-    if [ $implementation_files_added -gt 0 ] && [ $test_files_added -eq 0 ]; then
+    if [ $implementation_files_added -gt 2 ] && [ $test_files_added -eq 0 ]; then
         echo "     ⚠️  No tests added for $implementation_files_added implementation files"
         readiness_issues+=("missing tests")
     else
@@ -312,21 +320,24 @@ for branch in "${claude_branches[@]}"; do
     fi
     
     # Boost score for vision-aligned changes
-    if echo "$changed_files" | grep -q "lib/services/.*Service"; then
+    if echo "$changed_files" | grep -q "src/services/.*\.rs"; then
         vision_score=$((vision_score + 2))  # Service layer improvements
     fi
-    if echo "$changed_files" | grep -q "lib/.*\.dart"; then
-        vision_score=$((vision_score + 1))  # Flutter component work
+    if echo "$changed_files" | grep -q "src/components/.*\.rs"; then
+        vision_score=$((vision_score + 1))  # Dioxus component work
     fi
-    if echo "$changed_files" | grep -q "Arweave\|arweave"; then
+    if echo "$changed_files" | grep -q "arweave\|Arweave"; then
         vision_score=$((vision_score + 2))  # Blockchain integration
     fi
-    if echo "$changed_files" | grep -q "lib/theme\.dart\|lib/.*theme"; then
-        vision_score=$((vision_score + 1))  # Theme improvements
+    if echo "$changed_files" | grep -q "assets/.*\.css\|src/.*theme"; then
+        vision_score=$((vision_score + 1))  # Styling improvements
+    fi
+    if echo "$changed_files" | grep -q "Cargo.toml\|Dioxus.toml"; then
+        vision_score=$((vision_score + 1))  # Build configuration
     fi
     
     # Reduce score for concerning patterns
-    if echo "$changed_files" | grep -q "pubspec\.yaml" && [ $commits_ahead -gt 10 ]; then
+    if echo "$changed_files" | grep -q "Cargo.toml" && [ $commits_ahead -gt 10 ]; then
         vision_score=$((vision_score - 1))  # Large dependency changes
     fi
     
@@ -582,15 +593,15 @@ if [ $total_remaining -gt 0 ]; then
         priority="LOW"
         priority_reason="needs review"
         
-        if echo "$changed_files" | grep -q "lib/services/ArweaveService\|lib/services/AuthService"; then
+        if echo "$changed_files" | grep -q "src/services/arweave\.rs\|src/services/wallet\.rs"; then
             priority="HIGH"
             priority_reason="core service implementation"
-        elif echo "$changed_files" | grep -q "lib/screens/.*\.dart"; then
+        elif echo "$changed_files" | grep -q "src/components/.*\.rs"; then
             priority="MEDIUM"
             priority_reason="user interface improvements"
-        elif echo "$changed_files" | grep -q "lib/theme\.dart\|pubspec\.yaml" && [ $commits_ahead -le 3 ]; then
+        elif echo "$changed_files" | grep -q "Cargo.toml\|Dioxus.toml" && [ $commits_ahead -le 3 ]; then
             priority="MEDIUM"
-            priority_reason="flutter framework updates"
+            priority_reason="dioxus framework updates"
         elif [ $days_ago -le 3 ] && [ $commits_ahead -le 5 ]; then
             priority="MEDIUM"
             priority_reason="recent active development"
@@ -608,11 +619,11 @@ if [ $total_remaining -gt 0 ]; then
     echo "3. Consider archiving LOW priority branches if inactive >30 days"
     echo ""
     
-    echo "💡 Sanctily Vision Alignment Tips:"
-    echo "   - Prioritize ArweaveService & AuthService completion"
-    echo "   - Focus on Timeline/Profile Flutter widget polish"
-    echo "   - Ensure Flutter cross-platform compatibility"
-    echo "   - Maintain ANS compliance for blockchain storage"
+    echo "💡 Faithful Archive Vision Alignment Tips:"
+    echo "   - Prioritize ArweaveService & WalletService completion"
+    echo "   - Focus on Upload/Browse Dioxus component polish"
+    echo "   - Ensure WASM optimization for web performance"
+    echo "   - Maintain spiritual content moderation workflow"
     echo ""
     
     echo "🔗 GitHub Integration Status:"

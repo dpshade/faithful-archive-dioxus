@@ -215,3 +215,8 @@ This project leverages Rust's performance and safety features while providing a 
 
 ### Project Synchronization
 - Always keep @ROADMAP.md and GH issues in step/sync with one another
+
+## Repository Management Guidelines
+
+### Workflow Memory
+- **Keep '/Users/dylanshade/Developer/faithful-archive-dioxus/faithful-archive/NEXT_UP.md' updated with the next issues/points on the roadmap to work on next. It should not list anything that cannot be worked on RIGHT NOW. Only list a single item if everything else depends on that single item, or if multiple items can be done in parallel right now, do so**
