@@ -3,6 +3,7 @@
 use dioxus::prelude::*;
 
 mod app;
+mod services;
 
 fn main() {
     // Initialize logging for web console
@@ -10,6 +11,6 @@ fn main() {
     
     log::info!("Starting Faithful Archive application");
 
-    // Launch the Dioxus web app
+    // Launch the Dioxus web app  
     launch(app::App);
 }
