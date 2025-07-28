@@ -172,6 +172,69 @@ Use lowercase for commit messages.
 
 ## Arweave Integration
 
+### Initial Integration - bundles-rs
+
+<p align="center">
+  <a href="https://load.network">
+    <img src="https://gateway.load.rs/bundle/0x83cf4417880af0d2df56ce04ecfc108ea4ee940e8fb81400e31ab81571e28d21/0">
+  </a>
+</p>
+
+A Rust SDK for creating, signing, managing and posting [ANS-104 dataitems](https://github.com/ArweaveTeam/arweave-standards/blob/master/ans/ANS-104.md).
+
+> Warning: this repository is actively under development and could have breaking changes until reaching full API compatibility in v1.0.0.
+
+**Installation:**
+
+Add to your `Cargo.toml`:
+
+```toml
+[dependencies]
+# main library
+bundles_rs = { git = "https://github.com/loadnetwork/bundles-rs", branch = "main" }
+
+# use individual crates
+ans104 = { git = "https://github.com/loadnetwork/bundles-rs", version = "0.1.0" } 
+crypto = { git = "https://github.com/loadnetwork/bundles-rs", version = "0.1.0" }
+```
+
+**Quick start example:**
+
+```rust
+use bundles_rs::{
+    ans104::{data_item::DataItem, tags::Tag},
+    crypto::ethereum::EthereumSigner,
+};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // create a signer
+    let signer = EthereumSigner::random()?;
+    
+    // create tags (metadata)
+    let tags = vec![
+        Tag::new("Content-Type", "text/plain"),
+        Tag::new("App-Name", "Faithful-Archive"),
+    ];
+    
+    // create and sign a dataitem
+    let data = b"Hello World Arweave!".to_vec();
+    let item = DataItem::build_and_sign(&signer, None, None, tags, data)?;
+    
+    // get the dataitem id
+    let id = item.arweave_id();
+    println!("dataitem id: {}", id);
+    
+    // serialize for upload
+    let bytes = item.to_bytes()?;
+    println!("Ready to upload {} bytes", bytes.len());
+    
+    Ok(())
+}
+```
+
+Full documentation: https://github.com/loadnetwork/bundles-rs
+
 ### Key Concepts
 - **Permanent Storage**: All content uploaded to Arweave is immutable
 - **Transaction Tags**: Metadata for content discovery and filtering
@@ -215,6 +278,19 @@ This project leverages Rust's performance and safety features while providing a 
 
 ### Project Synchronization
 - Always keep @ROADMAP.md and GH issues in step/sync with one another
+
+## Common Issues & Solutions
+
+### dx serve Problems
+- **`dx serve` fails with wasm-bindgen file not found**: Simplify `Dioxus.toml` to minimal config, clean build with `cargo clean && rm -rf target`
+- **No CSS styling in browser**: Use `document::Stylesheet { href: asset!("/assets/tailwind.css") }` with proper `assets/tailwind.css` file
+- **WASM compilation errors in browser**: Set `opt-level = 0` and `debug = true` in `[profile.wasm-dev]`
+- **Build path mismatches**: Remove complex `[web.resource]` and `[bundle]` sections from `Dioxus.toml`
+
+### Tailwind CSS Integration
+- **External CDN CSS not loading**: Create local `assets/tailwind.css` with required utility classes
+- **Classes not applying**: Use `asset!` macro instead of direct href paths
+- **Build fails with CSS**: Follow Dioxus docs pattern with `input.css` and generated output
 
 ## Repository Management Guidelines
 

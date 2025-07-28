@@ -1,10 +1,46 @@
 #![allow(non_snake_case)]
 
 use dioxus::prelude::*;
+use crate::services::arweave::ArweaveService;
 
 #[component]
 pub fn App() -> Element {
+    // State for testing bundles-rs integration
+    let mut test_result = use_signal(|| String::new());
+    let mut is_testing = use_signal(|| false);
+
+    // Test function for bundles-rs integration
+    let test_bundles_rs = move |_| {
+        spawn(async move {
+            is_testing.set(true);
+            test_result.set("Testing bundles-rs integration...".to_string());
+            
+            match ArweaveService::new_random() {
+                Ok(service) => {
+                    let address = service.get_address();
+                    match service.create_test_item("Hello from Faithful Archive!") {
+                        Ok(item) => {
+                            let item_id = service.get_item_id(&item);
+                            match service.serialize_item(&item) {
+                                Ok(bytes) => {
+                                    test_result.set(format!(
+                                        "✅ Success!\nSigner Address: {}\nDataItem ID: {}\nSerialized Size: {} bytes",
+                                        address, item_id, bytes.len()
+                                    ));
+                                }
+                                Err(e) => test_result.set(format!("❌ Serialization failed: {}", e)),
+                            }
+                        }
+                        Err(e) => test_result.set(format!("❌ DataItem creation failed: {}", e)),
+                    }
+                }
+                Err(e) => test_result.set(format!("❌ Service creation failed: {}", e)),
+            }
+            is_testing.set(false);
+        });
+    };
     rsx! {
+        document::Stylesheet { href: asset!("/assets/tailwind.css") }
         div {
             id: "app",
             class: "min-h-screen bg-gradient-to-br from-green-50 to-green-100",
@@ -91,6 +127,40 @@ pub fn App() -> Element {
                         button {
                             class: "border border-green-600 text-green-600 hover:bg-green-50 px-8 py-3 rounded-lg text-lg font-medium transition-colors",
                             "Browse Content"
+                        }
+                    }
+                }
+                
+                // bundles-rs Integration Test Section
+                div {
+                    class: "bg-white rounded-xl shadow-sm border border-blue-200 p-8 mb-16",
+                    h3 {
+                        class: "text-2xl font-bold text-gray-900 mb-4 text-center",
+                        "🧪 bundles-rs Integration Test"
+                    }
+                    p {
+                        class: "text-gray-600 text-center mb-6",
+                        "Test the bundles-rs DataItem creation and signing functionality"
+                    }
+                    
+                    div {
+                        class: "flex justify-center mb-6",
+                        button {
+                            class: if *is_testing.read() {
+                                "bg-gray-400 cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium"
+                            } else {
+                                "bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                            },
+                            disabled: *is_testing.read(),
+                            onclick: test_bundles_rs,
+                            if *is_testing.read() { "Testing..." } else { "Test bundles-rs" }
+                        }
+                    }
+                    
+                    if !test_result.read().is_empty() {
+                        div {
+                            class: "bg-gray-50 rounded-lg p-4 font-mono text-sm whitespace-pre-line",
+                            "{test_result}"
                         }
                     }
                 }
@@ -277,3 +347,4 @@ pub fn App() -> Element {
         }
     }
 }
+
