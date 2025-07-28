@@ -102,20 +102,20 @@
         </div>
     </noscript>
     
-    <!-- ArConnect detection script -->
+    <!-- Wander Wallet Bridge (formerly ArConnect) -->
+    <script src="/wallet-bridge.js"></script>
+    
+    <!-- Application initialization -->
     <script>
-        // Check if ArConnect is available
-        window.arweaveWallet = window.arweaveWallet || null;
-        
-        // Store ArConnect availability for the WASM app
+        // Store app info for WASM application
         window.faithful_archive = {
-            arconnect_available: !!window.arweaveWallet,
+            wallet_available: window.walletBridge ? window.walletBridge.checkWalletAvailable() : false,
             version: '0.1.0'
         };
         
         // Log startup information
         console.log('Faithful Archive v0.1.0 - Built with Dioxus and Rust');
-        console.log('ArConnect available:', window.faithful_archive.arconnect_available);
+        console.log('Wander wallet available:', window.faithful_archive.wallet_available);
     </script>
 </body>
 </html>

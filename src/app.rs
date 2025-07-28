@@ -2,9 +2,15 @@
 
 use dioxus::prelude::*;
 use crate::services::arweave::ArweaveService;
+use crate::services::wallet::{WalletButton, init_wallet_service};
 
 #[component]
 pub fn App() -> Element {
+    // Initialize wallet service on app startup
+    use_effect(move || {
+        init_wallet_service();
+    });
+    
     // State for testing bundles-rs integration
     let mut test_result = use_signal(|| String::new());
     let mut is_testing = use_signal(|| false);
@@ -93,10 +99,7 @@ pub fn App() -> Element {
                         }
                         
                         // Wallet connection button
-                        button {
-                            class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-                            "Connect Wallet"
-                        }
+                        WalletButton {}
                     }
                 }
             }
