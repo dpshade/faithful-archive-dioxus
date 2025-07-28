@@ -210,3 +210,8 @@ pub struct SpiritualContent {
 6. Content becomes discoverable through search
 
 This project leverages Rust's performance and safety features while providing a modern web interface for spiritual content archiving on the Arweave blockchain.
+
+## Project Management Guidelines
+
+### Project Synchronization
+- Always keep @ROADMAP.md and GH issues in step/sync with one another
