@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faithful Archive - Christ-honoring content on Arweave</title>
+    
+    <!-- Meta tags for SEO and social sharing -->
+    <meta name="description" content="Faithful Archive is a modern web application for uploading and sharing Christ-honoring spiritual content on Arweave's permanent storage network.">
+    <meta name="keywords" content="arweave, spiritual content, sermons, worship, bible study, blockchain, permanent storage">
+    <meta name="author" content="Faithful Archive">
+    
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="Faithful Archive - Christ-honoring content on Arweave">
+    <meta property="og:description" content="Preserve spiritual content forever on the blockchain. Upload sermons, worship resources, and Bible studies.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://faithful-archive.org">
+    
+    <!-- Twitter meta tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Faithful Archive">
+    <meta name="twitter:description" content="Christ-honoring content on Arweave blockchain">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#059669">
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:;">
+    
+    <!-- Loading styles -->
+    <style>
+        /* Loading spinner for initial page load */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #bbf7d0;
+            border-top: 4px solid #059669;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .loading-text {
+            margin-top: 20px;
+            color: #059669;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: 600;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Hide loading when app is ready */
+        #app:not(:empty) + .loading-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main application root -->
+    <div id="main"></div>
+    
+    <!-- Loading indicator (shown until WASM loads) -->
+    <div class="loading-container">
+        <div style="text-align: center;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Faithful Archive...</div>
+        </div>
+    </div>
+    
+    <!-- Error fallback (if JavaScript is disabled) -->
+    <noscript>
+        <div style="padding: 20px; text-align: center; font-family: sans-serif;">
+            <h1 style="color: #059669;">Faithful Archive</h1>
+            <p>This application requires JavaScript and WebAssembly to run.</p>
+            <p>Please enable JavaScript in your browser to continue.</p>
+        </div>
+    </noscript>
+    
+    <!-- ArConnect detection script -->
+    <script>
+        // Check if ArConnect is available
+        window.arweaveWallet = window.arweaveWallet || null;
+        
+        // Store ArConnect availability for the WASM app
+        window.faithful_archive = {
+            arconnect_available: !!window.arweaveWallet,
+            version: '0.1.0'
+        };
+        
+        // Log startup information
+        console.log('Faithful Archive v0.1.0 - Built with Dioxus and Rust');
+        console.log('ArConnect available:', window.faithful_archive.arconnect_available);
+    </script>
+</body>
+</html>

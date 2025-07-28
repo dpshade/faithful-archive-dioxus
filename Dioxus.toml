@@ -1,0 +1,31 @@
+[application]
+name = "faithful_archive"
+default_platform = "web"
+
+[web.app]
+title = "Faithful Archive"
+base_path = "."
+
+[web.watcher]
+reload_html = true
+watch_path = ["src", "assets"]
+
+[web.resource]
+dev = { style = ["assets/main.css"] }
+release = { style = ["assets/main.css"] }
+
+[web.proxy]
+
+[bundle]
+identifier = "org.faithful-archive.app"
+publisher = "Faithful Archive"
+icon = ["assets/icon-32.png"]
+resources = ["assets"]
+copyright = "Copyright (c) Faithful Archive 2025"
+category = "DeveloperTool"
+short_description = "Christ-honoring spiritual content on Arweave"
+long_description = """
+Faithful Archive is a modern web application for uploading and sharing 
+Christ-honoring spiritual content on Arweave's permanent storage network.
+Built with Dioxus and compiled to WebAssembly for high performance.
+"""
