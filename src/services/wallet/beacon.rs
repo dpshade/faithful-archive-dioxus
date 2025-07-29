@@ -99,78 +99,37 @@ impl BeaconStrategy {
         }
     }
     
-    /// Check if Beacon wallet ao-sync-sdk is available
+    /// Check if Beacon wallet WalletClient is available
     async fn is_beacon_available() -> bool {
-        console_log("🔍 Checking Beacon availability...");
+        console_log("🔍 Checking Beacon WalletClient availability...");
         
-        // First, try to create WalletClient if it doesn't exist
-        let create_wallet_client = r#"
+        // Check if WalletClient exists on window object
+        let check_code = r#"
 (function() {
-    if (typeof window.WalletClient === 'undefined') {
-        console.log('🛠️ Creating mock WalletClient directly from WASM');
+    if (typeof window.WalletClient !== 'undefined') {
+        console.log('✅ WalletClient found on window object');
         
-        window.WalletClient = class MockWalletClient {
-            constructor() {
-                console.log('🆕 Mock WalletClient created from WASM');
-            }
-            
-            async connect(options) {
-                console.log('🔗 Mock connect called with options:', options);
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                return {
-                    address: 'mock_beacon_address_' + Math.random().toString(36).substr(2, 9)
-                };
-            }
-            
-            async disconnect() {
-                console.log('🔌 Mock disconnect called');
-                return true;
-            }
-            
-            async signTransaction(transaction) {
-                console.log('✍️ Mock signTransaction called:', transaction);
-                return {
-                    ...transaction,
-                    signature: 'mock_signature_' + Math.random().toString(36).substr(2, 9)
-                };
-            }
-            
-            async reconnect() {
-                console.log('🔄 Mock reconnect called');
-                return this.connect({});
-            }
-            
-            on(event, callback) {
-                console.log('👂 Mock event listener registered:', event);
-            }
-        };
-        
-        console.log('✅ WalletClient created from WASM');
-        return true;
+        // Test if we can instantiate it
+        try {
+            const testClient = new window.WalletClient();
+            console.log('✅ WalletClient can be instantiated');
+            return true;
+        } catch (e) {
+            console.error('❌ WalletClient constructor failed:', e);
+            return false;
+        }
     } else {
-        console.log('✅ WalletClient already exists');
-        return true;
+        console.log('❌ WalletClient not found on window object');
+        return false;
     }
 })()
         "#;
         
-        // Execute the WalletClient creation
-        match js_eval(create_wallet_client).as_bool() {
-            Some(true) => {
-                console_log("✅ WalletClient is now available");
-                
-                // Verify it works
-                let test_code = "try { new WalletClient(); true; } catch(e) { console.error('WalletClient constructor failed:', e); false; }";
-                let can_instantiate = js_eval(test_code).as_bool().unwrap_or(false);
-                console_log(&format!("🏗️ Can instantiate WalletClient: {}", can_instantiate));
-                
-                can_instantiate
-            },
-            _ => {
-                console_log("❌ Failed to create or verify WalletClient");
-                false
-            }
-        }
+        // Execute the check
+        let is_available = js_eval(check_code).as_bool().unwrap_or(false);
+        console_log(&format!("🔍 Beacon WalletClient available: {}", is_available));
+        
+        is_available
     }
 }
 
