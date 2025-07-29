@@ -4,3 +4,13 @@ default_platform = "web"
 
 [web.app]
 title = "Faithful Archive"
+# Use our custom HTML template with wallet scripts
+index_on_404 = true
+
+[web.resource]
+# Point to our custom HTML template
+index = "public/index.html"
+
+[web.resource.dev]
+# Development-specific settings
+index = "public/index.html"

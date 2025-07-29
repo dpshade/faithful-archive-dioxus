@@ -3,6 +3,7 @@
 use dioxus::prelude::*;
 
 mod app;
+mod components;
 mod services;
 
 fn main() {

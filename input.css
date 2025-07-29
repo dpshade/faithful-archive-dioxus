@@ -1,2 +1,26 @@
 @import "tailwindcss";
 @source "./src/**/*.{rs,html,css}";
+
+/* Custom CSS Variables and Wallet Styles */
+:root {
+  --primary-green: #059669;
+  --primary-green-dark: #047857;
+  --primary-green-light: #10b981;
+  --secondary-green: #f0fdf4;
+  --accent-green: #bbf7d0;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --background: #ffffff;
+  --background-alt: #f9fafb;
+  --beacon-wallet: #1D2BC2;
+  --wander-wallet: #EBE0FF;
+}
+
+/* Wallet modal specific styles */
+.beacon-wallet-bg {
+  background-color: var(--beacon-wallet);
+}
+
+.wander-wallet-bg {
+  background-color: var(--wander-wallet);
+}

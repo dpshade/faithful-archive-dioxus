@@ -90,6 +90,8 @@
   --text-secondary: #6b7280;
   --background: #ffffff;
   --background-alt: #f9fafb;
+  --beacon-wallet: #1D2BC2;
+  --wander-wallet: #EBE0FF;
 }
 
 /* Base styles */
@@ -194,6 +196,15 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-green-light);
+}
+
+/* Wallet modal specific styles */
+.beacon-wallet-bg {
+  background-color: var(--beacon-wallet);
+}
+
+.wander-wallet-bg {
+  background-color: var(--wander-wallet);
 }
 
 /* Focus styles for accessibility */

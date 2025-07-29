@@ -102,8 +102,24 @@
         </div>
     </noscript>
     
+    <!-- Import map for CDN resolution -->
+    <script type="importmap">
+    {
+        "imports": {
+            "@vela-ventures/ao-sync-sdk": "https://cdn.jsdelivr.net/npm/@vela-ventures/ao-sync-sdk@1.1.33/dist/esm/index.js",
+            "mqtt": "https://cdn.jsdelivr.net/npm/mqtt@5/dist/mqtt.min.js",
+            "uuid": "https://cdn.jsdelivr.net/npm/uuid@11/dist/esm-browser/index.js",
+            "qrcode": "https://cdn.jsdelivr.net/npm/qrcode@1/build/index.js",
+            "buffer": "https://cdn.jsdelivr.net/npm/buffer@6/index.js"
+        }
+    }
+    </script>
+    
     <!-- Wander Wallet Bridge (formerly ArConnect) -->
     <script src="/wallet-bridge.js"></script>
+    
+    <!-- Beacon Wallet SDK Loader (ES Module) -->
+    <script type="module" src="/beacon-wallet-loader.js"></script>
     
     <!-- Application initialization -->
     <script>
@@ -114,8 +130,10 @@
         };
         
         // Log startup information
-        console.log('Faithful Archive v0.1.0 - Built with Dioxus and Rust');
-        console.log('Wander wallet available:', window.faithful_archive.wallet_available);
+        console.log('🚀 Faithful Archive v0.1.0 - Built with Dioxus and Rust');
+        console.log('🔍 Wander wallet available:', window.faithful_archive.wallet_available);
+        console.log('🔍 WalletClient available:', typeof window.WalletClient !== 'undefined');
+        console.log('🔍 All window wallet keys:', Object.keys(window).filter(k => k.toLowerCase().includes('wallet')));
     </script>
 </body>
 </html>
