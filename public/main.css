@@ -3,6 +3,11 @@
 /* Import Tailwind CSS via CDN for initial development */
 @import url('https://cdn.tailwindcss.com');
 
+root {
+  --beacon-wallet: #1D2BC2;
+  --wander-wallet: ##EBE0FF;
+}
+
 /* Fallback utility classes in case Tailwind doesn't load */
 .min-h-screen { min-height: 100vh; }
 .bg-gradient-to-br { background: linear-gradient(to bottom right, #f0fdf4, #bbf7d0); }

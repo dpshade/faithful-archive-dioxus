@@ -1,0 +1,27 @@
+{
+  "name": "faithful-archive-dioxus",
+  "version": "1.0.0",
+  "description": "![Rust](https://img.shields.io/badge/rust-%23000000.svg?style=for-the-badge&logo=rust&logoColor=white) ![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=WebAssembly&logoColor=white) [![Dioxus](https://img.shields.io/badge/Dioxus-0.6-blue?style=for-the-badge)](https://dioxuslabs.com/) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dpshade/faithful-archive-dioxus/issues)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dpshade/faithful-archive-dioxus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dpshade/faithful-archive-dioxus/issues"
+  },
+  "homepage": "https://github.com/dpshade/faithful-archive-dioxus#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.11",
+    "tailwindcss": "^4.1.11"
+  },
+  "dependencies": {
+    "@vela-ventures/ao-sync-sdk": "^1.1.33"
+  }
+}

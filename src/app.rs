@@ -2,9 +2,16 @@
 
 use dioxus::prelude::*;
 use crate::services::arweave::ArweaveService;
+use crate::services::wallet::init_wallet_service;
+use crate::components::WalletConnectButton;
 
 #[component]
 pub fn App() -> Element {
+    // Initialize wallet service on app startup
+    use_effect(move || {
+        init_wallet_service();
+    });
+    
     // State for testing bundles-rs integration
     let mut test_result = use_signal(|| String::new());
     let mut is_testing = use_signal(|| false);
@@ -74,29 +81,26 @@ pub fn App() -> Element {
                         
                         // Navigation
                         nav {
-                            class: "hidden md:flex space-x-8",
+                            class: "hidden md:flex space-x-2",
                             a {
                                 href: "#",
-                                class: "text-gray-600 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium",
+                                class: "text-gray-700 hover:text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-sm",
                                 "Browse"
                             }
                             a {
                                 href: "#",
-                                class: "text-gray-600 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium",
+                                class: "text-gray-700 hover:text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-sm",
                                 "Upload"
                             }
                             a {
                                 href: "#",
-                                class: "text-gray-600 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium",
+                                class: "text-gray-700 hover:text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:shadow-sm",
                                 "About"
                             }
                         }
                         
                         // Wallet connection button
-                        button {
-                            class: "bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-                            "Connect Wallet"
-                        }
+                        WalletConnectButton {}
                     }
                 }
             }
@@ -121,11 +125,11 @@ pub fn App() -> Element {
                     div {
                         class: "space-x-4",
                         button {
-                            class: "bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-colors",
+                            class: "bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg text-lg font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5",
                             "Start Uploading"
                         }
                         button {
-                            class: "border border-green-600 text-green-600 hover:bg-green-50 px-8 py-3 rounded-lg text-lg font-medium transition-colors",
+                            class: "border-2 border-green-600 text-green-600 hover:bg-green-50 px-8 py-3 rounded-lg text-lg font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5",
                             "Browse Content"
                         }
                     }
@@ -147,9 +151,9 @@ pub fn App() -> Element {
                         class: "flex justify-center mb-6",
                         button {
                             class: if *is_testing.read() {
-                                "bg-gray-400 cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium"
+                                "bg-gray-300 cursor-not-allowed text-gray-600 px-6 py-3 rounded-lg font-medium border-2 border-gray-200"
                             } else {
-                                "bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                                "bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md hover:shadow-lg"
                             },
                             disabled: *is_testing.read(),
                             onclick: test_bundles_rs,
@@ -159,7 +163,11 @@ pub fn App() -> Element {
                     
                     if !test_result.read().is_empty() {
                         div {
-                            class: "bg-gray-50 rounded-lg p-4 font-mono text-sm whitespace-pre-line",
+                            class: if test_result.read().contains("✅") {
+                                "bg-green-50 border border-green-200 rounded-lg p-4 font-mono text-sm whitespace-pre-line"
+                            } else {
+                                "bg-red-50 border border-red-200 rounded-lg p-4 font-mono text-sm whitespace-pre-line"
+                            },
                             "{test_result}"
                         }
                     }

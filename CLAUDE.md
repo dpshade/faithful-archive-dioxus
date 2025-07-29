@@ -296,3 +296,8 @@ This project leverages Rust's performance and safety features while providing a 
 
 ### Workflow Memory
 - **Keep '/Users/dylanshade/Developer/faithful-archive-dioxus/faithful-archive/NEXT_UP.md' updated with the next issues/points on the roadmap to work on next. It should not list anything that cannot be worked on RIGHT NOW. Only list a single item if everything else depends on that single item, or if multiple items can be done in parallel right now, do so**
+
+## Development Workflow Memories
+
+### Tailwind CSS Setup
+- We must run tailwind server to use it alongside dx serve: `npx @tailwindcss/cli -i ./input.css -o ./assets/tailwind.css --watch`
